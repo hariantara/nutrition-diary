@@ -4,8 +4,11 @@
 	<head>
 		<meta charset="utf-8">
 		<title></title>
+		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 		<style media="screen">
 			body{
 				background-color: #525252;
@@ -29,7 +32,7 @@
 			    		<h3 class="panel-title">Please Log In or <a href="register.html">Sign Up</a></h3>
 			 			</div>
 			 			<div class="panel-body">
-			    		<form role="form">
+			    		<!-- <form role="form"> -->
 
 			    					<div class="form-group">
 			                <input type="text" name="username" id="username" class="form-control input-sm" placeholder="Username">
@@ -41,13 +44,42 @@
 
 			    			<input type="submit" value="Log In" class="btn btn-info btn-block">
 
-			    		</form>
+			    		<!-- </form> -->
 			    	</div>
 	    		</div>
     		</div>
     	</div>
     </div>
 	</body>
-
+	<script>
+		$('.btn').click(function() {
+			axios.post('http://localhost:3000/users/signin', {
+		    username: $('#username').val(),
+		    password: $('#password').val()
+		  })
+		  .then(function (response) {
+				alert('berhasil login')
+				localStorage.setItem('token', response.data)
+		    // console.log(response);
+				var config = {
+						headers: {'token': localStorage.getItem('token')}
+					};
+				if(config.headers != null)
+				{
+					axios.get('http://localhost:3000/users/read', config)
+					.then(resp=>{
+						console.log(resp)
+						window.location.href = "/user.html"
+					})
+					.catch(err=>{
+						console.log(err)
+					})
+				}
+		  })
+		  .catch(function (error) {
+		    console.log(error);
+		  });
+		})
+	</script>
 
 </html>
