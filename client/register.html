@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 	<head>
 		<meta charset="utf-8">
 		<title></title>
@@ -29,20 +28,33 @@
         <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
         	<div class="panel panel-default">
         		<div class="panel-heading">
-			    		<h3 class="panel-title">Please Log In or <a href="register.html">Sign Up</a></h3>
+			    		<h3 class="panel-title">Please sign up <small>It's free!</small></h3>
 			 			</div>
 			 			<div class="panel-body">
 			    		<!-- <form role="form"> -->
+			    			<!-- <div class="row"> -->
+			    				<!-- <div class="col-xs-6 col-sm-6 col-md-6"> -->
+                    <div class="form-group">
+                      <input type="text" name="username" id="username" class="form-control input-sm" placeholder="Username">
+                    </div>
 
-			    					<div class="form-group">
-			                <input type="text" name="username" id="username" class="form-control input-sm" placeholder="Username">
-			    					</div>
 
+
+			    			<div class="form-group">
+			    				<input type="email" name="email" id="email" class="form-control input-sm" placeholder="Email Address">
+			    			</div>
+
+			    			<!-- <div class="row"> -->
+			    				<!-- <div class="col-xs-6 col-sm-6 col-md-6"> -->
 			    					<div class="form-group">
 			    						<input type="password" name="password" id="password" class="form-control input-sm" placeholder="Password">
 			    					</div>
+			    				<!-- </div> -->
 
-			    			<input type="submit" value="Log In" class="btn btn-info btn-block">
+			    			<!-- </div> -->
+
+			    			<input type="submit" value="Sign Up" class="btn btn-info btn-block">
+								<a href="/">back</a>
 
 			    		<!-- </form> -->
 			    	</div>
@@ -51,35 +63,20 @@
     	</div>
     </div>
 	</body>
-	<script>
-		$('.btn').click(function() {
-			axios.post('http://localhost:3000/users/signin', {
-		    username: $('#username').val(),
-		    password: $('#password').val()
-		  })
-		  .then(function (response) {
-				alert('berhasil login')
-				localStorage.setItem('token', response.data)
-		    // console.log(response);
-				var config = {
-						headers: {'token': localStorage.getItem('token')}
-					};
-				if(config.headers != null)
-				{
-					axios.get('http://localhost:3000/users/read', config)
-					.then(resp=>{
-						console.log(resp)
-						window.location.href = "/user.html"
-					})
-					.catch(err=>{
-						console.log(err)
-					})
-				}
-		  })
-		  .catch(function (error) {
-		    console.log(error);
-		  });
-		})
-	</script>
+<script>
+$('.btn').click(function(){
+	axios.post('http://localhost:3000/users/signup', {
+    username: $('#username').val(),
+    email: $('#email').val(),
+		password: $('#password').val()
+  })
+  .then(function (response) {
+    console.log(response);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+})
 
+</script>
 </html>
