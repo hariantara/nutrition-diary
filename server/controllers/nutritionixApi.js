@@ -1,5 +1,7 @@
 'use strict'
 const axios = require('axios');
+var contohData = require('../contohdata.json');
+var convert = require('../helpers/convert')
 
 exports.getData = (req,res) => {
   var keyword = req.body.diary;
@@ -17,7 +19,10 @@ exports.getData = (req,res) => {
       headers: {'x-app-id':`${process.env.APP_ID_NUTRITIONIX}`, 'x-app-key':`${process.env.APP_KEY_NUTRITIONIX}`, 'x-remote-user-id':`${process.env.REMOTE_USER_ID_NUTRITIONIX}`}
       })
       .then(function (response) {
-        res.send(response.data)
+        convert(response.data,(diary)=>{
+          diary.diary_note = `${req.body.diary}`;
+          res.send(diary)
+        })
       })
       .catch(function (error) {
         console.log(error);
@@ -26,6 +31,11 @@ exports.getData = (req,res) => {
   .catch(function (error) {
     console.log(error);
   });
+}
 
+exports.contohData = (req,res) => {
+  convert(contohData,(diary)=>{
+    res.send(diary)
+  })
 
 }
