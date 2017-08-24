@@ -3,6 +3,22 @@ var randomBytes = require('random-bytes')
 var jwt = require('jsonwebtoken');
 require('dotenv').config()
 
+
+function user(req, res, next)
+{
+  // console.log(req.headers.token);
+  var decoded = jwt.verify(req.headers.token, process.env.SECRETKEY);
+  if(decoded.role == 'user')
+  {
+    next()
+  }
+  else {
+    res.send('maaf anda belum terdaftar')
+  }
+  // console.log(decoded)
+}
+
+
 function randomValueHex (len)//untuk men generate si secret key
 {
     return crypto.randomBytes(Math.ceil(len/2))
@@ -23,5 +39,6 @@ function cryptoGraph(password, secret)// secret di gunakan sebagai pola untuk ha
 
 module.exports = {
   randomValueHex,
-  cryptoGraph
+  cryptoGraph,
+  user
 }
