@@ -11,9 +11,15 @@
   </head>
   <body>
     <h1>Welcome user</h1>
-
+    <input type="button" class="logout" name="button" value="button">
     <table>
 
     </table>
   </body>
+  <script>
+    $('.logout').click(function(){
+      localStorage.removeItem('token');
+      window.location.href = "/index.html"
+    })
+  </script>
 </html>
