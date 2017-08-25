@@ -1,62 +1,160 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <style media="screen">
-			body{
-				/*background-color: #e8fffd;*/
-			}
-			.centered-form{
-			  margin-top: 60px;
-			}
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-			.centered-form .panel{
-				background: rgba(255, 255, 255, 0.8);
-				box-shadow: rgba(0, 0, 0, 0.3) 20px 20px 20px;
-			}
-		</style>
-  </head>
-  <body>
-    <div class="container">
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <style media="screen">
+    body {
+      /*background-color: #e8fffd;*/
+    }
+
+    .centered-form {
+      margin-top: 60px;
+    }
+
+    .centered-form .panel {
+      background: rgba(255, 255, 255, 0.8);
+      box-shadow: rgba(0, 0, 0, 0.3) 20px 20px 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
     <h1>Welcome user</h1>
 
     <button type="button" class="logout" name="button">Logout</button>
     <button type="button" name="button" class="btn btn-danger"><a href="list-diary.html">Diary List</a></button>
 
-    <div class="row centered-form">
-    <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
-      <div class="panel panel-info">
-        <div class="panel-heading">
-          <h3 class="panel-title">Add diary</a></h3>
+    <div class="row centered-form" id="form-diary">
+      <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            <h3 class="panel-title">Add diary</a></h3>
+          </div>
+          <div class="panel-body">
+            <!-- <form role="form"> -->
+            <div class="form-group">
+              <form class="new-diary" action="" method="post">
+                <textarea name="diary" id="new-diary" class="form-control input-sm" placeholder="type here"></textarea><br>
+                <button type="submit" class="btn btn-info btn-block">Submit</button>
+              </form>
+            </div>
+
+            <!-- </form> -->
+          </div>
         </div>
-        <div class="panel-body">
-          <!-- <form role="form"> -->
+      </div>
+    </div>
 
-                <div class="form-group">
-                  <textarea name="diary" id="diary" class="form-control input-sm" placeholder="type here"></textarea>
-                </div>
+    <div class="row centered-form" id="review-diary" style="display:none">
+      <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            <h3 class="panel-title">Review your diary</a></h3>
+          </div>
+          <div class="panel-body">
+            <div id="summary-diary">
+
+            </div>
+            <div class="table-responsive">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Nama</th>
+                    <th>Jumlah saji</th>
+                    <th>Takaran saji</th>
+                    <th>Kolesterol</th>
+                    <th>Lemak</th>
+                    <th>karbohidrat</th>
+                    <th>Protein</th>
+                  </tr>
+                </thead>
+                <tbody id="foods-list">
+                  <tr>
+                    <td>no</td>
+                    <td>nama makanan</td>
+                    <td>jmlh</td>
+                    <td>takaran</td>
+                    <td>colesterol </td>
+                    <td>fat</td>
+                    <td>karbo</td>
+                    <td>protein</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+                <input type="submit" value="Save" class="btn btn-info btn-block">
+                <a href="/user.html"><input type="button" value="Cancel" class="btn btn-danger btn-block"></a>
+              </div>
+            </div>
 
 
-            <button type="button" name="button" class="btn btn-info btn-block"><a href="review.html">Submit</a></button>
-
-
-          <!-- </form> -->
+            <!-- </form> -->
+          </div>
         </div>
       </div>
     </div>
   </div>
- </div>
-    </div>
-  </body>
-  <script>
-    $('.logout').click((function){
-      window.location.href="/index.html"
+  </div>
+</body>
+<script>
+// $(document).ready(function(){
+//   $('#review-diary').hide()
+// })
+
+  $('.logout').click((function() {
+    window.location.href = "/index.html"
+  }))
+
+  $('form.new-diary').submit(eventHandler => {
+    eventHandler.preventDefault()
+    $.ajax({
+      url: 'http://localhost:3000/nutritionix-api/',
+      type: 'POST',
+      data: {
+        diary: $('#new-diary').val()
+      },
+      success: function(newdiary) {
+        console.log(newdiary);
+        $('#form-diary').fadeOut('slow')
+        $('#review-diary').fadeIn('slow')
+        $('#foods-list').empty()
+        $('#summary-diary').empty()
+        $('#summary-diary').append(`
+          <p>Diary note: ${newdiary.diary_note}</p>
+          <p>Total kolesterol: ${newdiary.total_cholesterol}  mg</p>
+          <p>Total lemak: ${newdiary.total_fat}  mg</p>
+          <p>Total karbohidrat: ${newdiary.total_carbohydrate}  mg</p>
+          <p>Total protein: ${newdiary.total_protein}  mg</p>
+          <p>Total kalori: ${newdiary.total_calories}  mg</p>
+          <p>Jam diary: ${newdiary.consumed_at}</p>
+          <br>
+          `)
+        newdiary.foods.forEach((x)=>{
+          $('#foods-list').append(`
+            <tr>
+              <td></td>
+              <td>${x.food_name}</td>
+              <td>${x.serving_qty}</td>
+              <td>${x.serving_unit}</td>
+              <td>${x.nf_cholesterol}</td>
+              <td>${x.total_fat}</td>
+              <td>${x.nf_total_carbohydrate}</td>
+              <td>${x.nf_protein}</td>
+            </tr>
+            `)
+        })
+      }
     })
-  </script>
+  })
+</script>
+
 </html>

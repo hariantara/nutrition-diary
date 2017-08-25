@@ -1,7 +1,7 @@
 'use strict'
 const axios = require('axios');
 var contohData = require('../contohdata.json');
-var convert = require('../helpers/convert')
+var convert = require('../helper/convert')
 
 exports.getData = (req,res) => {
   var keyword = req.body.diary;
@@ -11,7 +11,6 @@ exports.getData = (req,res) => {
     url: `https://translate.yandex.net/api/v1.5/tr.json/translate?key=${process.env.KEY_YANDEX}&text=${uri}&lang=id-en`
   })
   .then(function (translate) {
-    //res.send(translate.data.text[0])
     axios({
       method: 'post',
       url: 'https://trackapi.nutritionix.com/v2/natural/nutrients',
