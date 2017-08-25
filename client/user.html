@@ -39,6 +39,7 @@
             <h3 class="panel-title">Add diary</a></h3>
           </div>
           <div class="panel-body">
+            <h3 id="status"></h3>
             <!-- <form role="form"> -->
             <div class="form-group">
               <form class="new-diary" action="" method="post">
@@ -61,7 +62,6 @@
           </div>
           <div class="panel-body">
             <div id="summary-diary">
-
             </div>
             <div class="table-responsive">
               <table class="table table-striped">
@@ -91,7 +91,7 @@
                 </tbody>
               </table>
               <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
-                <input type="submit" value="Save" class="btn btn-info btn-block">
+                <input type="button" onclick="saveDiary()" value="Save" class="btn btn-info btn-block">
                 <a href="/user.html"><input type="button" value="Cancel" class="btn btn-danger btn-block"></a>
               </div>
             </div>
@@ -109,8 +109,28 @@
 // $(document).ready(function(){
 //   $('#review-diary').hide()
 // })
+console.log(localStorage.getItem('token'));
+
+  function saveDiary(){
+    //console.log(localStorage.getItem('newDiary'));
+    $.ajax({
+      url: 'http://localhost:3000/nutritionix-api/save',
+      type: 'POST',
+      data: {diary: localStorage.getItem('newDiary'),
+      token: localStorage.getItem('token')},
+      success: function(response){
+        localStorage.removeItem('diary')
+        $('#form-diary').fadeIn('slow')
+        $('#review-diary').fadeOut('slow')
+        $('#status').append('diary berhail di masukkan')
+      }
+    })
+  }
+
 
   $('.logout').click((function() {
+    localStorage.removeItem('token')
+    localStorage.removeItem('diary')
     window.location.href = "/index.html"
   }))
 
@@ -123,7 +143,7 @@
         diary: $('#new-diary').val()
       },
       success: function(newdiary) {
-        console.log(newdiary);
+        localStorage.setItem('newDiary',JSON.stringify(newdiary))
         $('#form-diary').fadeOut('slow')
         $('#review-diary').fadeIn('slow')
         $('#foods-list').empty()

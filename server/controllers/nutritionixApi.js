@@ -1,5 +1,7 @@
 'use strict'
 const axios = require('axios');
+var modelDiary = require('../models/diary');
+var jwt = require('jsonwebtoken');
 var contohData = require('../contohdata.json');
 var convert = require('../helper/convert')
 
@@ -30,6 +32,34 @@ exports.getData = (req,res) => {
   .catch(function (error) {
     console.log(error);
   });
+}
+
+exports.save = (req,res) => {
+
+  var diaryJSON = JSON.parse(req.body.diary)
+  //console.log(JSON.parse(req.body.diary));
+  //console.log(diary.diary_note);
+  var decoded = jwt.verify(req.body.token, process.env.SECRETKEY);
+  //console.log(decoded._id);
+  //console.log(modelDiary);
+
+  modelDiary.create({
+    user_id: decoded._id,
+    diary_note : diaryJSON.diary_note,
+    total_fat : diaryJSON.total_fat,
+    total_cholesterol : diaryJSON.total_cholesterol,
+    total_carbohydrate : diaryJSON.total_carbohydrate,
+    total_calories : diaryJSON.total_calories,
+    total_protein : diaryJSON.total_protein,
+    consumed_at : diaryJSON.consumed_at,
+    foods : diaryJSON.foods
+  })
+  .then((data)=>{
+    res.send(data)
+  })
+  .catch((err)=>{
+    res.send(err)
+  })
 }
 
 exports.contohData = (req,res) => {

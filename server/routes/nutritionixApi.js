@@ -6,6 +6,7 @@ var login = require('../helper/helper')
 // router.use(login.user)
 
 router.post('/',nutritionixApi.getData);
+router.post('/save',nutritionixApi.save );
 router.get('/',nutritionixApi.contohData);
 
 module.exports = router
