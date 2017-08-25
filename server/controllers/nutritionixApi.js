@@ -85,6 +85,20 @@ exports.findByIdDetail = (req,res) => {
   })
 }
 
+exports.deleteById = (req,res) => {
+  var decoded = jwt.verify(req.headers.token, process.env.SECRETKEY);
+  var id = { user_id: decoded._id, _id: req.body._id}
+  console.log(id);
+  console.log('masuk');
+  modelDiary.deleteOne(id)
+  .then((result)=>{
+    res.send(result)
+  })
+  .catch((err)=>{
+    res.send(err)
+  })
+}
+
 exports.contohData = (req,res) => {
   convert(contohData,(diary)=>{
     res.send(diary)

@@ -23,16 +23,23 @@
             </tr>
           </thead>
           <tbody id="list-diary">
-
+            <tr>
+              <td></td>
+            </tr>
           </tbody>
         </table>
       </div>
    </div>
+
+
    <script>
    $(document).ready(function(){
      loadDiary()
+
    })
+
    function loadDiary() {
+     $('#list-diary').empty()
      axios({
        method: 'GET',
        url: 'http://localhost:3000/nutritionix-api/diary-user',
@@ -47,7 +54,13 @@
                <td>${diary.consumed_at}</td>
                <td>${diary.diary_note}</td>
                <td>${diary.total_calories}</td>
-               <td><a href="detail-diary.html?diary_id=${diary._id}">detail</a> | <a href="#">delete</a></td>
+               <td>
+                 <form class="delete" method="post" onsubmit="destroy();return false">
+                    <input type="text" id='id_diary' value="${diary._id}" style="display:none">
+                    <a href="detail-diary.html?diary_id=${diary._id}"><button type="button" name="button">detail</button></a>
+                    <button type="submit" name="submit"> delete</button>
+                </form>
+               </td>
              </tr>
           `)
          })
@@ -56,6 +69,23 @@
          console.log(error);
        });
    }
+
+   function destroy(){
+     axios({
+       url: 'http://localhost:3000/nutritionix-api/diary-user',
+       method: 'DELETE',
+       headers: {'token':localStorage.getItem('token')},
+       data: {_id: $('#id_diary').val()}
+     })
+     .then(function(response){
+       if (response.statusText === "OK") {
+          loadDiary()
+       } else {
+         alert('gagal delete ')
+       }
+     })
+   }
+
 
    </script>
 
