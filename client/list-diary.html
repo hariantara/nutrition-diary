@@ -3,9 +3,10 @@
   <head>
     <meta charset="utf-8">
     <title></title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   </head>
   <body>
     <div class="container">
@@ -19,22 +20,45 @@
               <th>Diary</th>
               <th>Total Kalori</th>
               <th>Opsi</th>
-
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>no</td>
-              <td>created At</td>
-              <td>note</td>
-              <td>total</td>
-              <td><a href="detail-diary.html">detail</a> | <a href="#">delete</a></td>
+          <tbody id="list-diary">
 
-            </tr>
           </tbody>
         </table>
       </div>
    </div>
+   <script>
+   $(document).ready(function(){
+     loadDiary()
+   })
+   function loadDiary() {
+     axios({
+       method: 'GET',
+       url: 'http://localhost:3000/nutritionix-api/diary-user',
+       headers: {'token':localStorage.getItem('token')}
+       })
+       .then(function (response) {
+         var number = 0
+         response.data.forEach((diary)=>{
+           $('#list-diary').append(`
+             <tr>
+               <td>${number+=1}</td>
+               <td>${diary.consumed_at}</td>
+               <td>${diary.diary_note}</td>
+               <td>${diary.total_calories}</td>
+               <td><a href="detail-diary.html?diary_id=${diary._id}">detail</a> | <a href="#">delete</a></td>
+             </tr>
+          `)
+         })
+       })
+       .catch(function (error) {
+         console.log(error);
+       });
+   }
+
+   </script>
+
 
 
   </body>

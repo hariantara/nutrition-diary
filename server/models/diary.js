@@ -1,9 +1,6 @@
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/nutrition');
-// var jwt = require('jsonwebtoken');
 var Schema = mongoose.Schema;
-
-// var decoded = jwt.verify(req.body.token, process.env.SECRETKEY);
 
 var diarySchema = new Schema({
   user_id:{type: Schema.ObjectId, ref: 'user'},

@@ -3,18 +3,17 @@
   <head>
     <meta charset="utf-8">
     <title></title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   </head>
   <body>
     <div class="container">
       <h1>Info detail</h1> <br>
-      <p>Diary note:</p>
-      <p>Total kolesterol:</p>
-      <p>Total lemak:</p>
-      <p>Total karbohidrat:</p>
-      <p>Total protein:</p>
-      <br>
+      <div id="summary-diary">
+
+      </div>
       <div class="table-responsive">
         <table class="table table-striped">
           <thead>
@@ -29,23 +28,71 @@
               <th>Protein</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>no</td>
-              <td>nama makanan</td>
-              <td>jmlh</td>
-              <td>takaran</td>
-              <td>colesterol </td>
-              <td>fat</td>
-              <td>karbo</td>
-              <td>protein</td>
-            </tr>
+          <tbody id="foods-list">
+
           </tbody>
         </table>
         <a href="list-diary.html">back</a>
       </div>
    </div>
+   <script>
+   $(document).ready(function(){
+     loadDetailDiary()
+   })
 
+   function getUrlVars()
+    {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for(var i = 0; i < hashes.length; i++)
+        {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    }
 
+    var _id = getUrlVars()["diary_id"];
+
+    function loadDetailDiary() {
+      axios({
+        method: 'GET',
+        url: 'http://localhost:3000/nutritionix-api/diary-detail-user',
+        headers: {'token':localStorage.getItem('token'),'_id': _id }
+        })
+        .then(function (response) {
+          var number = 0
+          console.log(response.data);
+          $('#summary-diary').append(`
+            <p>Diary note: ${response.data[0].diary_note}</p>
+            <p>Total kolesterol: ${response.data[0].total_cholesterol}  mg</p>
+            <p>Total lemak: ${response.data[0].total_fat}  mg</p>
+            <p>Total karbohidrat: ${response.data[0].total_carbohydrate}  mg</p>
+            <p>Total protein: ${response.data[0].total_protein}  mg</p>
+            <p>Total kalori: ${response.data[0].total_calories}  mg</p>
+            <p>Jam diary: ${response.data[0].consumed_at}</p>
+            <br>
+            `)
+          response.data[0].foods.forEach((x)=>{
+            $('#foods-list').append(`
+              <tr>
+                <td></td>
+                <td>${x.food_name}</td>
+                <td>${x.serving_qty}</td>
+                <td>${x.serving_unit}</td>
+                <td>${x.nf_cholesterol}</td>
+                <td>${x.total_fat}</td>
+                <td>${x.nf_total_carbohydrate}</td>
+                <td>${x.nf_protein}</td>
+              </tr>
+              `)
+          })
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+   </script>
   </body>
 </html>

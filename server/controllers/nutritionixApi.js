@@ -37,11 +37,7 @@ exports.getData = (req,res) => {
 exports.save = (req,res) => {
 
   var diaryJSON = JSON.parse(req.body.diary)
-  //console.log(JSON.parse(req.body.diary));
-  //console.log(diary.diary_note);
   var decoded = jwt.verify(req.body.token, process.env.SECRETKEY);
-  //console.log(decoded._id);
-  //console.log(modelDiary);
 
   modelDiary.create({
     user_id: decoded._id,
@@ -56,6 +52,33 @@ exports.save = (req,res) => {
   })
   .then((data)=>{
     res.send(data)
+  })
+  .catch((err)=>{
+    res.send(err)
+  })
+}
+
+exports.findById = (req,res) => {
+  var decoded = jwt.verify(req.headers.token, process.env.SECRETKEY);
+  var id = { user_id: decoded._id}
+  modelDiary.find(id)
+  .populate('user')
+  .then((documents)=>{
+    res.send(documents)
+  })
+  .catch((err)=>{
+    res.send(err)
+  })
+}
+
+exports.findByIdDetail = (req,res) => {
+  var decoded = jwt.verify(req.headers.token, process.env.SECRETKEY);
+  var id = { user_id: decoded._id, _id: req.headers._id}
+  modelDiary.find(id)
+  .populate('user')
+  .then((documents)=>{
+    console.log(documents);
+    res.send(documents)
   })
   .catch((err)=>{
     res.send(err)
