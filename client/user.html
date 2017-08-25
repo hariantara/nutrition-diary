@@ -4,22 +4,59 @@
     <meta charset="utf-8">
     <title></title>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style media="screen">
+			body{
+				/*background-color: #e8fffd;*/
+			}
+			.centered-form{
+			  margin-top: 60px;
+			}
+
+			.centered-form .panel{
+				background: rgba(255, 255, 255, 0.8);
+				box-shadow: rgba(0, 0, 0, 0.3) 20px 20px 20px;
+			}
+		</style>
   </head>
   <body>
+    <div class="container">
     <h1>Welcome user</h1>
-    <input type="button" class="logout" name="button" value="button">
-    <table>
 
-    </table>
+    <button type="button" class="logout" name="button"></button>
+    <button type="button" name="button" class="btn btn-danger"><a href="list-diary.html">Diary List</a></button>
+
+    <div class="row centered-form">
+    <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title">Add diary</a></h3>
+        </div>
+        <div class="panel-body">
+          <!-- <form role="form"> -->
+
+                <div class="form-group">
+                  <textarea name="diary" id="diary" class="form-control input-sm" placeholder="type here"></textarea>
+                </div>
+
+
+            <button type="button" name="button" class="btn btn-info btn-block"><a href="review.html">Submit</a></button>
+
+
+          <!-- </form> -->
+        </div>
+      </div>
+    </div>
+  </div>
+ </div>
+    </div>
   </body>
   <script>
-    $('.logout').click(function(){
-      localStorage.removeItem('token');
-      window.location.href = "/index.html"
+    $('.logout').click((function){
+      window.location.href="/index.html"
     })
   </script>
 </html>
