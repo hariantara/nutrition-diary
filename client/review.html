@@ -5,8 +5,26 @@
     <title></title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+      body{
+        background-color: #e2e2e2;
+        background-image: url('img/b2.jpg');
+        background-size:cover;
+      }
+    </style>
   </head>
   <body>
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="user.html">Food Diary</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li><a href="list-diary.html">List Diary</a></li>
+          <li><a href="index.html" class="logout">Log Out</a></li>
+        </ul>
+      </div>
+    </nav>
     <div class="container">
       <h1>Review your diary</h1> <br>
       <p>Diary note:</p>
@@ -51,4 +69,11 @@
 
 
   </body>
+  <script>
+    $('.logout').click((function() {
+      localStorage.removeItem('token')
+      localStorage.removeItem('newDiary')
+      window.location.href = "/index.html"
+    }))
+  </script>
 </html>
