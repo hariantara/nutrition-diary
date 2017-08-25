@@ -25,8 +25,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-var index = require('./routes/index');
-var users = require('./routes/users');
+
 var nutritionixApi = require('./routes/nutritionixApi')
 
 app.use(cors())
